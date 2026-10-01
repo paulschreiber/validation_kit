@@ -42,7 +42,7 @@ module ValidationKit
 
       disallowed_characters = disallowed_characters_for_country(country)
 
-      new_value = value.nil? ? "" : value.upcase.gsub(disallowed_characters, "")
+      new_value = value.to_s.upcase.gsub(disallowed_characters, "")
 
       # allow_blank/allow_nil are handled by ActiveModel on the original value,
       # so input that only becomes blank once cleaned up (e.g. "n/a") is invalid.
@@ -59,7 +59,7 @@ module ValidationKit
     def format_as_postal_code(arg, country_code, disallowed_characters)
       return nil if arg.blank? || country_code.blank? || !postal_code_regex_for_country(country_code)
 
-      postal_code = arg.gsub(disallowed_characters, "")
+      postal_code = arg.to_s.gsub(disallowed_characters, "")
 
       if ["US"].include?(country_code)
         digit_count = postal_code.length
