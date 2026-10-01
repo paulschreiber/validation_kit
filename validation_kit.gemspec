@@ -14,11 +14,12 @@ Gem::Specification.new do |s|
   s.description = "A collection of various validators for Rails forms"
 
   s.files         = `git ls-files -- lib`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
   s.required_ruby_version = ">= 3.4"
 
   s.add_dependency "activemodel", ">= 7.1"
 
   s.metadata["rubygems_mfa_required"] = "true"
+  s.metadata["source_code_uri"] = s.homepage
+  s.metadata["bug_tracker_uri"] = "#{s.homepage}/issues"
 end
