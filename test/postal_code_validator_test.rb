@@ -54,4 +54,29 @@ class PostalCodeValidatorTest < Minitest::Test
     assert_match validator.postal_code_regex_for_country("CA"), "K1A 0B1"
     refute_match validator.postal_code_regex_for_country("US"), "10001\n99999"
   end
+
+  UK_COUNTRY_CODES = %w[UK GB].freeze
+
+  def test_validates_and_formats_uk_postcodes
+    [
+      ["SW1A 1AA", "SW1A 1AA"],
+      ["sw1a1aa", "SW1A 1AA"],
+      ["M1 1AE", "M1 1AE"],
+      ["B338TH", "B33 8TH"],
+      ["CR2 6XH", "CR2 6XH"],
+      ["DN55 1PT", "DN55 1PT"],
+      ["EC1A 1BB", "EC1A 1BB"],
+      ["GIR 0AA", "GIR 0AA"]
+    ].each do |postcode, formatted|
+      UK_COUNTRY_CODES.each do |country|
+        assert_equal [true, formatted], validate(postcode, country), "#{country} #{postcode}"
+      end
+    end
+  end
+
+  def test_rejects_invalid_uk_postcodes
+    ["SW1A 1A", "SW1A 1AAA", "12345", "1AA 1AA", "SW1A"].each do |postcode|
+      assert_equal [false, postcode], validate(postcode, "UK"), postcode
+    end
+  end
 end
