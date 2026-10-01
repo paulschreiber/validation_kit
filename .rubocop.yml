@@ -1,0 +1,39 @@
+plugins:
+  - rubocop-minitest
+  - rubocop-performance
+  - rubocop-rake
+
+AllCops:
+  NewCops: enable
+  # Oldest Ruby the gem supports (it's tested on Ruby 4).
+  TargetRubyVersion: 3.0
+  Exclude:
+    - "Gemfile.lock"
+    - "pkg/**/*"
+    - "vendor/**/*"
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Layout/LineLength:
+  Exclude:
+    # EMAIL_ADDRESS_RE is a single ~1,000-character regex.
+    - "lib/validation_kit/email_validator/email_validator.rb"
+
+Metrics/AbcSize:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - "test/**/*"
