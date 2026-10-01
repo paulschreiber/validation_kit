@@ -8,15 +8,18 @@ module ValidationKit
 
     def validate_each(record, attribute, value)
       return if value.nil?
-      return if value.gsub(/\W/, "").size < 3 # skip very short words
 
-      error = nil
+      # Only letters that have a case count, so digits, punctuation, and
+      # scripts without case (e.g. Chinese) never trigger an error.
+      upper = value.to_s.scan(/\p{Lu}/).size
+      lower = value.to_s.scan(/\p{Ll}/).size
+      return if upper + lower < 3 # skip very short words
 
-      if value.upcase == value
-        error = ALL_CAPS
-      elsif value.downcase == value
-        error = ALL_LOWERCASE
-      end
+      error = if lower.zero?
+                ALL_CAPS
+              elsif upper.zero?
+                ALL_LOWERCASE
+              end
 
       return if error.nil?
 
