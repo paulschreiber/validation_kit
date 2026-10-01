@@ -31,7 +31,6 @@ jobs:
           - Gemfile
           - gemfiles/activemodel_8_0.gemfile
           - gemfiles/activemodel_7_2.gemfile
-          - gemfiles/activemodel_7_1.gemfile
 
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
