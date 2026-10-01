@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version     = ValidationKit::VERSION
   s.authors     = ["Wes Morgan", "Paul Schreiber"]
   s.email       = ["wes@turbovote.org", "paulschreiber@gmail.com"]
-  s.homepage    = "https://github.com/turbovote/validation_kit"
+  s.homepage    = "https://github.com/paulschreiber/validation_kit"
   s.licenses    = ["MIT"]
   s.summary     = "Handy validations for Rails forms"
   s.description = "A collection of various validators for Rails forms"
