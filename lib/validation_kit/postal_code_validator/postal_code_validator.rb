@@ -44,19 +44,13 @@ module ValidationKit
 
       new_value = value.nil? ? "" : value.upcase.gsub(disallowed_characters, "")
 
-      model_name = record.class.to_s
-
       if (options[:allow_blank] && new_value.blank?) || new_value =~ current_regex
         if options[:set]
           record.send("#{attribute}=",
                       format_as_postal_code(new_value, country, disallowed_characters))
         end
       else
-        message = I18n.t("activerecord.errors.models.#{model_name.underscore}.attributes.#{attribute}.invalid",
-                         default: [:"activerecord.errors.models.#{model_name.underscore}.invalid",
-                                   options[:message],
-                                   :"activerecord.errors.messages.invalid"])
-        record.errors.add(attribute, message)
+        record.errors.add(attribute, :invalid, message: options[:message])
       end
     end
 
