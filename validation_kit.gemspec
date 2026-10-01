@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "Handy validations for Rails forms"
   s.description = "A collection of various validators for Rails forms"
 
-  s.files         = `git ls-files -- lib README.md LICENSE`.split("\n")
+  s.files         = `git ls-files -- lib README.md LICENSE CHANGELOG.md`.split("\n")
   s.require_paths = ["lib"]
   s.required_ruby_version = ">= 3.4"
 
@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
   s.metadata["rubygems_mfa_required"] = "true"
   s.metadata["source_code_uri"] = s.homepage
   s.metadata["bug_tracker_uri"] = "#{s.homepage}/issues"
+  s.metadata["changelog_uri"] = "#{s.homepage}/blob/main/CHANGELOG.md"
 end
