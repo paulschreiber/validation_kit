@@ -37,9 +37,3 @@ Metrics/MethodLength:
 Metrics/BlockLength:
   Exclude:
     - "test/**/*"
-
-# Plain %s tokens are clearer than %<name>s for these short phone/postcode formats.
-Style/FormatString:
-  Enabled: false
-Style/FormatStringToken:
-  Enabled: false
