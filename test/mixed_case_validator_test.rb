@@ -35,7 +35,7 @@ class MixedCaseValidatorTest < Minitest::Test
 
   def test_prefers_a_translated_attribute_name
     I18n.backend.store_translations(
-      :en, activerecord: { attributes: { "mixed_case_validator_test/person": { first_name: "Given name" } } }
+      :en, activemodel: { attributes: { "mixed_case_validator_test/person": { first_name: "Given name" } } }
     )
 
     assert_equal ["Given name cannot be in all caps"], errors_for(first_name: "JANE")[:first_name]
