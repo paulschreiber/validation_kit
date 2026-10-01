@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = "Handy validations for Rails forms"
   s.description = "A collection of various validators for Rails forms"
 
-  s.files         = `git ls-files`.split("\n")
+  s.files         = `git ls-files`.split("\n") - ["Gemfile.lock"]
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
   s.required_ruby_version = ">= 3.0"
