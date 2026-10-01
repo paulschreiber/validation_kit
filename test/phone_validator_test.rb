@@ -42,4 +42,23 @@ class PhoneValidatorTest < Minitest::Test
       assert_equal formatted, us.format_as_phone(input, "US"), input
     end
   end
+
+  def test_takes_the_extension_from_after_the_number
+    us = ValidationKit::PhoneValidator.new(attributes: [:phone], country: "US")
+
+    [
+      ["2223332223 ext 5", "(222) 333-2223 ext 5"],
+      ["2125551212 x1212", "(212) 555-1212 x1212"],
+      ["Tel: 212-555-1234 x5", "(212) 555-1234 x5"],
+      ["1 222 333 2223 ext 5", "(222) 333-2223 ext 5"]
+    ].each do |input, formatted|
+      assert_equal formatted, us.format_as_phone(input, "US"), input
+    end
+  end
+
+  def test_rejects_a_short_number_whose_extension_would_complete_it
+    us = ValidationKit::PhoneValidator.new(attributes: [:phone], country: "US")
+
+    assert_nil us.format_as_phone("519 444 000 ext 123", "US")
+  end
 end
