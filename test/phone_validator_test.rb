@@ -69,4 +69,25 @@ class PhoneValidatorTest < Minitest::Test
       assert_nil validator.format_as_phone(input, country), "#{country} #{input}"
     end
   end
+
+  def test_formats_au_special_service_and_mobile_numbers
+    {
+      "1300 123 456" => "1300 123 456",
+      "1800123456" => "1800 123 456",
+      "1900-123-456" => "1900 123 456",
+      "1902123456" => "1902 123 456",
+      "131234" => "13 12 34",
+      "0412 345 678" => "0412 345 678",
+      "412345678" => "0412 345 678"
+    }.each do |input, formatted|
+      assert_equal formatted, validator.format_as_phone(input, "AU"), input
+    end
+  end
+
+  def test_formats_canadian_numbers
+    ca = ValidationKit::PhoneValidator.new(attributes: [:phone], country: "CA")
+
+    assert_equal "(416) 555-1234", ca.format_as_phone("416-555-1234", "CA")
+    assert_equal "(604) 555-1234 ext 7", ca.format_as_phone("1 (604) 555-1234 ext 7", "CA")
+  end
 end
