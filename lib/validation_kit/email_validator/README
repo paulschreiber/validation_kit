@@ -24,7 +24,7 @@ p.valid?   # false
 p = Person.new(:email => "joe@foobar.com")
 p.valid?   # true
 
-Just like with built-in ActiveRecord validations, you can optionally supply a :message parameter with a custom error. Or, you can use Rails' built-in localization system and 
+Just like with built-in ActiveRecord validations, you can optionally supply a :message parameter with a custom error. Or, you can use Rails' built-in localization system and
 
 
 = License
