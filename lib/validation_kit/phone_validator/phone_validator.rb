@@ -74,18 +74,17 @@ module ValidationKit
           number
         end
       elsif %w[CA US].include?(country_code)
-        digit_count = number.length
         # if it's too short
-        return number if digit_count < 10
+        return number if number.length < 10
 
-        # strip off any leading ones
-        number = number[1..10] if number[0..0] == "1"
+        # strip off the leading 1 (country code); any digits beyond ten are an extension
+        number = number[1..] if number.length > 10 && number.start_with?("1")
 
         area_code = number[0..2]
         exchange = number[3..5]
         sln = number[6..9]
 
-        if digit_count == 10
+        if number.length == 10
           extension = nil
         else
           # save everything after the SLN as extension
