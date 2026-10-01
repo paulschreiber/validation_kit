@@ -67,12 +67,10 @@ module ValidationKit
           number.insert(0, "0") if /\A4\d{8}\z/.match?(number)
 
           number.insert(4, " ").insert(8, " ")
-        else
-          number
         end
       elsif %w[CA US].include?(country_code)
         # if it's too short
-        return number if number.length < 10
+        return nil if number.length < 10
 
         # strip off the leading 1 (country code); any digits beyond ten are an extension
         leading_one = number.length > 10 && number.start_with?("1")
