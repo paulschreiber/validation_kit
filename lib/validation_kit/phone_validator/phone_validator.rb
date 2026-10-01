@@ -49,6 +49,7 @@ module ValidationKit
     def format_as_phone(arg, country_code = nil, area_key = nil)
       return nil if arg.blank? || country_code.blank? || !regex_for_country(country_code)
 
+      arg = arg.to_s
       number = arg.gsub(/[^0-9]/, "")
 
       if country_code == "AU"
