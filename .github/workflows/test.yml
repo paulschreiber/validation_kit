@@ -49,3 +49,15 @@ jobs:
 
       - name: Run tests
         run: bundle exec rake test
+
+  # The single check the main branch ruleset requires, so the matrix above can
+  # change without editing the ruleset. It reports even when a test job fails.
+  tests-passed:
+    name: Tests passed
+    if: always()
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check that every test job passed
+        run: test "${{ needs.test.result }}" = success
