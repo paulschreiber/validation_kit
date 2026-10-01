@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split("\n") - ["Gemfile.lock"]
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
-  s.required_ruby_version = ">= 3.0"
+  s.required_ruby_version = ">= 3.4"
 
   s.metadata["rubygems_mfa_required"] = "true"
 end

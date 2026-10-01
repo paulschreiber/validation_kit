@@ -5,8 +5,8 @@ plugins:
 
 AllCops:
   NewCops: enable
-  # Oldest Ruby the gem supports (it's tested on Ruby 4).
-  TargetRubyVersion: 3.0
+  # Oldest Ruby the gem supports; matches required_ruby_version and the CI matrix.
+  TargetRubyVersion: 3.4
   Exclude:
     - "Gemfile.lock"
     - "pkg/**/*"
