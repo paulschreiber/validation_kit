@@ -1,7 +1,4 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
-require "active_support"
-require "active_support/core_ext/string/inflections"
-require "active_model"
 require "validation_kit"
