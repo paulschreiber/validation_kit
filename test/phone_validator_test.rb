@@ -1,0 +1,30 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+class PhoneValidatorTest < Minitest::Test
+  def validator
+    ValidationKit::PhoneValidator.new(attributes: [:phone], country: "AU")
+  end
+
+  def test_au_regex_accepts_landlines_with_and_without_area_code
+    regex = validator.regex_for_country("AU")
+
+    assert_match regex, "0298765432"
+    assert_match regex, "298765432"
+    assert_match regex, "98765432"
+  end
+
+  def test_au_regex_does_not_treat_a_pipe_as_an_area_code_digit
+    regex = validator.regex_for_country("AU")
+
+    refute_match regex, "|98765432"
+    refute_match regex, "0|98765432"
+  end
+
+  def test_formats_au_landlines
+    assert_equal "(02) 9876 5432", validator.format_as_phone("02 9876 5432", "AU")
+    assert_equal "(02) 9876 5432", validator.format_as_phone("2 9876 5432", "AU")
+    assert_equal "(03) 9876 5432", validator.format_as_phone("9876 5432", "AU", "VIC")
+  end
+end
