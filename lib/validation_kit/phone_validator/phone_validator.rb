@@ -78,7 +78,8 @@ module ValidationKit
         return number if number.length < 10
 
         # strip off the leading 1 (country code); any digits beyond ten are an extension
-        number = number[1..] if number.length > 10 && number.start_with?("1")
+        leading_one = number.length > 10 && number.start_with?("1")
+        number = number[1..] if leading_one
 
         area_code = number[0..2]
         exchange = number[3..5]
@@ -87,14 +88,14 @@ module ValidationKit
         if number.length == 10
           extension = nil
         else
-          # save everything after the SLN as extension
-          sln_index = arg.index(sln)
-          # if something went wrong, return nil so we can error out
-          # i.e. 519 444 000 ext 123 would cause sln to be 0001, which is not found
-          # in the original string
-          return nil if sln_index.nil?
+          # save everything after the last digit of the number as the extension
+          national = arg[/\A(?:\D*\d){#{leading_one ? 11 : 10}}/]
+          # if letters appear among those digits, the extension's digits were
+          # counted as part of the number (e.g. 519 444 000 ext 123), so return
+          # nil to error out
+          return nil if national.sub(/\A\D*/, "").match?(/[[:alpha:]]/)
 
-          extension = " %s" % arg[(sln_index + 4)..].strip
+          extension = " #{arg[national.length..].strip}"
         end
 
         format("(%s) %s-%s%s", area_code, exchange, sln, extension)
