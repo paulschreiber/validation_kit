@@ -1,44 +1,50 @@
-validates_as_phone
-==================
+PhoneValidator
+==============
 
+Strict validation for phone numbers in the US, Canada, and Australia.
 
-Strict validation module for phone numbers that supports classifications and
-areas.
+Installation
+============
 
-= General usage
+Add the gem to your Gemfile:
 
-== Installation
+  gem "validation_kit"
 
-You can install the plugin the traditional way. Go to your application root
-and do:
+Usage
+=====
 
-  script/plugin install git://github.com/paulschreiber/validates_as_phone.git
+class Person < ActiveRecord::Base
+  validates :phone, phone: { country: "US", set: true }, allow_blank: true
+end
 
-== Validate your model attributes
+There are three ways to specify the country. Country codes are
+case-insensitive ("CA", "ca", or :CA).
 
-Example:
+ (1) Pass the country code as a string:
 
-There are three ways to specify the country:
- (1) Pass the country name in as a string parameter (:country => "CA")
- class Person < ActiveRecord::Base
-   validates_as_phone :phone, :country => "CA", :allow_blank => true, :set => true
- end
+  validates :phone, phone: { country: "CA" }
 
- (2) Create an attribute (country field) named foo in your object, and pass in a reference to foo:
+ (2) Pass the name of a method on your model that returns the country code:
 
- class Person < ActiveRecord::Base
-   validates_as_phone :phone, :country => :foo
- end
+  validates :phone, phone: { country: :billing_country }
 
- (3) Create an attribute named country it in your object, i.e. Person#country
-     i.e. country is the default name for your country field, and the validator tries that automatically
+ (3) Leave it out, and the validator calls your model's country method:
 
- class Person < ActiveRecord::Base
-   validates_as_phone :phone
- end
+  validates :phone, phone: true
 
-The :set parameter tells the validator to reformat the phone number (change punctuation and spacing) in to a standard format.
+Validation is skipped when the country isn't supported.
 
+Options
+=======
+
+  set: true       Reformat the stored value, e.g. "1-212-555-1234 x5"
+                  becomes "(212) 555-1234 x5" and "0298765432" becomes
+                  "(02) 9876 5432".
+  area_key: "VIC" For Australian landlines entered without an area code, the
+                  state whose area code to add (default NSW/ACT, 02).
+  message: "..."  A custom error message. Otherwise the standard :invalid
+                  error is added; translate it with
+                  activerecord.errors.models.person.attributes.phone.invalid.
 
 Supported countries are Canada (CA), the United States (US) and Australia (AU).
 

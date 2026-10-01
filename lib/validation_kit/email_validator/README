@@ -1,31 +1,46 @@
-validates_as_email
-==================
+EmailValidator
+==============
 
-Validation module for email addresses.
+Validates that an attribute is an email address.
 
 Installation
 ============
 
-You can install the plugin the traditional way. Go to your application root
-and do:
+Add the gem to your Gemfile:
 
-  script/plugin install git://github.com/paulschreiber/validates_as_email.git
+  gem "validation_kit"
 
 Example
 =======
 
 class Person < ActiveRecord::Base
-  validates_as_email :email
+  validates :email, email: true
 end
 
-p = Person.new(:email => "Bob")
-p.valid?   # false
+Person.new(email: "Bob").valid?             # false
+Person.new(email: "joe@foobar.com").valid?  # true
 
-p = Person.new(:email => "joe@foobar.com")
-p.valid?   # true
+Error Messages
+==============
 
-Just like with built-in ActiveRecord validations, you can optionally supply a :message parameter with a custom error. Or, you can use Rails' built-in localization system and define
-activerecord.errors.models.person.attributes.email.invalid.
+Invalid addresses get the standard :invalid error ("is invalid"). Pass a
+:message option for a custom message:
+
+  validates :email, email: { message: "doesn't look like an email address" }
+
+or translate it with Rails' I18n system:
+
+en:
+  activerecord:
+    errors:
+      models:
+        person:
+          attributes:
+            email:
+              invalid: "Enter your email address"
+
+(Use activemodel instead of activerecord for ActiveModel classes that aren't
+ActiveRecord models.)
 
 
 = License
