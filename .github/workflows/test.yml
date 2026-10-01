@@ -1,11 +1,20 @@
 name: Tests
 
 on:
+  # Runs on main save a gem cache there that new pull requests can restore.
+  push:
+    branches: [main]
   pull_request:
   merge_group:
 
 permissions:
   contents: read
+
+# A new push to a pull request cancels its previous run. Runs on main always
+# finish, so each merge is tested and its cache saved.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
