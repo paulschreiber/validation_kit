@@ -27,4 +27,19 @@ class PhoneValidatorTest < Minitest::Test
     assert_equal "(02) 9876 5432", validator.format_as_phone("2 9876 5432", "AU")
     assert_equal "(03) 9876 5432", validator.format_as_phone("9876 5432", "AU", "VIC")
   end
+
+  def test_formats_us_numbers_with_a_leading_country_code_without_a_trailing_space
+    us = ValidationKit::PhoneValidator.new(attributes: [:phone], country: "US")
+
+    [
+      ["212-555-1234", "(212) 555-1234"],
+      ["1-212-555-1234", "(212) 555-1234"],
+      ["+1 (212) 555-1234", "(212) 555-1234"],
+      ["12125551234", "(212) 555-1234"],
+      ["212-555-1234 x5", "(212) 555-1234 x5"],
+      ["1-212-555-1234 ext. 99", "(212) 555-1234 ext. 99"]
+    ].each do |input, formatted|
+      assert_equal formatted, us.format_as_phone(input, "US"), input
+    end
+  end
 end
