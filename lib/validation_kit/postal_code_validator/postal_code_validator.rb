@@ -44,7 +44,9 @@ module ValidationKit
 
       new_value = value.nil? ? "" : value.upcase.gsub(disallowed_characters, "")
 
-      if (options[:allow_blank] && new_value.blank?) || new_value =~ current_regex
+      # allow_blank/allow_nil are handled by ActiveModel on the original value,
+      # so input that only becomes blank once cleaned up (e.g. "n/a") is invalid.
+      if current_regex.match?(new_value)
         if options[:set]
           record.send("#{attribute}=",
                       format_as_postal_code(new_value, country, disallowed_characters))
