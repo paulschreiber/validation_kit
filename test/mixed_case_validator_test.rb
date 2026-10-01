@@ -48,4 +48,15 @@ class MixedCaseValidatorTest < Minitest::Test
       assert_equal ["First name ne peut pas être en majuscules"], errors_for(first_name: "JANE")[:first_name]
     end
   end
+
+  def test_ignores_values_without_enough_cased_letters
+    ["123", "4-5-6", "李小龙", "J. R."].each do |name|
+      assert_empty errors_for(first_name: name)[:first_name], name
+    end
+  end
+
+  def test_counts_accented_letters
+    assert_equal ["First name cannot be in all caps"], errors_for(first_name: "ÉLO")[:first_name]
+    assert_equal ["First name cannot be in all lowercase"], errors_for(first_name: "élo")[:first_name]
+  end
 end
