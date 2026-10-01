@@ -29,7 +29,6 @@ module ValidationKit
       return unless current_regex
 
       new_value = value.to_s.gsub(/[^0-9]/, "")
-      new_value ||= ""
 
       model_name = record.class.to_s
 
