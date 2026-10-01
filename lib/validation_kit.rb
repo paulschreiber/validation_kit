@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_model"
+require "active_support/core_ext/string/inflections"
 require "validation_kit/version"
 
 lib_path = File.dirname(__FILE__)
