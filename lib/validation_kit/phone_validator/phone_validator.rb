@@ -6,9 +6,9 @@ module ValidationKit
       if country_code.blank?
         nil
       elsif ["AU"].include?(country_code)
-        /(^(1300|1800|1900|1902)\d{6}$)|(^(0?[12378])?[1-9][0-9]{7}$)|(^13\d{4}$)|(^0?4\d{8}$)/
+        /\A(?:(?:1300|1800|1900|1902)\d{6}|(?:0?[12378])?[1-9][0-9]{7}|13\d{4}|0?4\d{8})\z/
       elsif %w[US CA].include?(country_code)
-        /^1?[2-9]\d{2}[2-9]\d{2}\d{4}/
+        /\A1?[2-9]\d{2}[2-9]\d{2}\d{4}/
       end
     end
 
@@ -16,9 +16,9 @@ module ValidationKit
       country = if options[:country].is_a?(String)
                   options[:country]
                 elsif options[:country].is_a?(Symbol) && record.respond_to?(options[:country])
-                  record.send(options[:country])
+                  record.public_send(options[:country])
                 elsif record.respond_to?(:country)
-                  record.send(:country)
+                  record.country
                 else
                   false
                 end
@@ -38,7 +38,7 @@ module ValidationKit
           if formatted_phone.nil?
             record.errors.add(attribute, :invalid, message: options[:message])
           else
-            record.send("#{attribute}=", formatted_phone)
+            record.public_send("#{attribute}=", formatted_phone)
           end
         end
       else
@@ -54,17 +54,17 @@ module ValidationKit
 
       if country_code == "AU"
         case number
-        when /^(1300|1800|1900|1902)\d{6}$/
+        when /\A(?:1300|1800|1900|1902)\d{6}\z/
           number.insert(4, " ").insert(8, " ")
-        when /^(0?[12378])?[1-9][0-9]{7}$/
-          number.insert(0, area_code_for_key(area_key)) if /^[1-9][0-9]{7}$/.match?(number)
-          number.insert(0, "0") if /^[12378][1-9][0-9]{7}$/.match?(number)
+        when /\A(?:0?[12378])?[1-9][0-9]{7}\z/
+          number.insert(0, area_code_for_key(area_key)) if /\A[1-9][0-9]{7}\z/.match?(number)
+          number.insert(0, "0") if /\A[12378][1-9][0-9]{7}\z/.match?(number)
 
           number.insert(0, "(").insert(3, ") ").insert(9, " ")
-        when /^13\d{4}$/
+        when /\A13\d{4}\z/
           number.insert(2, " ").insert(5, " ")
-        when /^0?4\d{8}$/
-          number.insert(0, "0") if /^4\d{8}$/.match?(number)
+        when /\A0?4\d{8}\z/
+          number.insert(0, "0") if /\A4\d{8}\z/.match?(number)
 
           number.insert(4, " ").insert(8, " ")
         else
@@ -95,7 +95,7 @@ module ValidationKit
           extension = " #{arg[national.length..].strip}"
         end
 
-        format("(%s) %s-%s%s", area_code, exchange, sln, extension)
+        "(#{area_code}) #{exchange}-#{sln}#{extension}"
       end
     end
 

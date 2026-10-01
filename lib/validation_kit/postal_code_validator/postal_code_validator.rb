@@ -30,9 +30,9 @@ module ValidationKit
       country = if options[:country].is_a?(String)
                   options[:country]
                 elsif options[:country].is_a?(Symbol) && record.respond_to?(options[:country])
-                  record.send(options[:country])
+                  record.public_send(options[:country])
                 elsif record.respond_to?(:country)
-                  record.send(:country)
+                  record.country
                 else
                   false
                 end
@@ -50,8 +50,7 @@ module ValidationKit
       # so input that only becomes blank once cleaned up (e.g. "n/a") is invalid.
       if current_regex.match?(new_value)
         if options[:set]
-          record.send("#{attribute}=",
-                      format_as_postal_code(new_value, country, disallowed_characters))
+          record.public_send("#{attribute}=", format_as_postal_code(new_value, country, disallowed_characters))
         end
       else
         record.errors.add(attribute, :invalid, message: options[:message])
@@ -68,18 +67,15 @@ module ValidationKit
         if digit_count == 5
           postal_code
         elsif digit_count == 9
-          format("%s-%s", postal_code[0..4], postal_code[5..8])
+          "#{postal_code[0..4]}-#{postal_code[5..8]}"
         end
 
       elsif %w[AU NZ].include?(country_code)
         postal_code
 
       elsif ["CA"].include?(country_code)
-        fsa = postal_code[0..2]
-        lda = postal_code[3..5]
-
-        postal_code = format("%s %s", fsa, lda)
-        postal_code.upcase
+        # forward sortation area, then local delivery unit
+        "#{postal_code[0..2]} #{postal_code[3..5]}".upcase
 
       elsif %w[UK GB].include?(country_code)
         # the inward code is always the last three characters
