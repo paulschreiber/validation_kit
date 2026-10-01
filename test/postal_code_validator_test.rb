@@ -79,4 +79,9 @@ class PostalCodeValidatorTest < Minitest::Test
       assert_equal [false, postcode], validate(postcode, "UK"), postcode
     end
   end
+
+  def test_validates_and_keeps_nz_postcodes_with_set
+    assert_equal [true, "6011"], validate("6011", "NZ")
+    assert_equal [false, "60111"], validate("60111", "NZ")
+  end
 end
