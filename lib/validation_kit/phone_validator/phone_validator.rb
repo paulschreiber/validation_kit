@@ -30,7 +30,9 @@ module ValidationKit
 
       new_value = value.to_s.gsub(/[^0-9]/, "")
 
-      if (options[:allow_blank] && new_value.blank?) || new_value =~ current_regex
+      # allow_blank/allow_nil are handled by ActiveModel on the original value,
+      # so input that only becomes blank once cleaned up (e.g. "n/a") is invalid.
+      if current_regex.match?(new_value)
         if options[:set]
           formatted_phone = format_as_phone(value, country, options[:area_key])
           if formatted_phone.nil?
