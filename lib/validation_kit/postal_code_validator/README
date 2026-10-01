@@ -36,7 +36,7 @@ There are three ways to specify the country:
 
 The :set parameter tells the validator to reformat the postal_code number (change punctuation and spacing) in to a standard format.
 
-Supported countries are Canada (CA), the United States (US), Australia (AU), New Zealand (NZ). :set only works for Canada and the US; it's ignored for other countries.
+Supported countries are Canada (CA), the United States (US), the United Kingdom (UK or GB), Australia (AU), and New Zealand (NZ). :set formats Canadian and UK codes with a space (K1A 0B1, SW1A 1AA) and US ZIP+4 codes with a hyphen (10001-1234).
 
 
 = License
