@@ -21,8 +21,9 @@ module ValidationKit
 
       model_name = record.class.to_s
 
-      item_name = I18n.t("activerecord.attributes.#{model_name.underscore}.#{attribute}",
-                         default: nil) or options[:attribute_name] or attribute
+      item_name = I18n.t("activerecord.attributes.#{model_name.underscore}.#{attribute}", default: nil) ||
+                  options[:attribute_name] ||
+                  attribute.to_s.humanize
 
       if error == ALL_CAPS
         message = I18n.t("activerecord.errors.models.#{model_name.underscore}.attributes.#{attribute}.all_caps",

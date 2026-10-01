@@ -10,3 +10,7 @@ validators.each do |v|
   validator = "ValidationKit::#{validator_class}".constantize
   ActiveModel::Validations.const_set(validator_class, validator)
 end
+
+# Put the bundled translations first in the load path so an app's own
+# locale files (which Rails appends later) can override them.
+I18n.load_path.unshift(*Dir[File.join(lib_path, "validation_kit", "**", "locales", "*.yml")])
