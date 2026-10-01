@@ -1,5 +1,6 @@
-# -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
+# frozen_string_literal: true
+
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 require "validation_kit/version"
 
 Gem::Specification.new do |s|
@@ -8,16 +9,13 @@ Gem::Specification.new do |s|
   s.authors     = ["Wes Morgan", "Paul Schreiber"]
   s.email       = ["wes@turbovote.org", "paulschreiber@gmail.com"]
   s.homepage    = "https://github.com/turbovote/validation_kit"
-  s.summary     = %q{Handy validations for Rails forms}
-  s.description = %q{A collection of various validators for Rails forms}
+  s.summary     = "Handy validations for Rails forms"
+  s.description = "A collection of various validators for Rails forms"
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
+  s.required_ruby_version = ">= 3.0"
 
-  s.add_development_dependency "activemodel"
-  s.add_development_dependency "minitest"
-  s.add_development_dependency "rake"
-
+  s.metadata["rubygems_mfa_required"] = "true"
 end
