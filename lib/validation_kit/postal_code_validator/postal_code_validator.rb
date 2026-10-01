@@ -11,6 +11,8 @@ module ValidationKit
         /\A\d{5}(?:-?\d{4})?\z/
       elsif ["CA"].include?(country_code)
         /\A[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTWVXYZ] ?\d[ABCEGHJKLMNPRSTWVXYZ]\d\z/
+      elsif %w[UK GB].include?(country_code)
+        /\A(?:[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0AA)\z/
       end
     end
 
@@ -19,7 +21,7 @@ module ValidationKit
         nil
       elsif %w[US AU NZ].include?(country_code)
         /[^0-9]/
-      elsif %w[CA UK].include?(country_code)
+      elsif %w[CA UK GB].include?(country_code)
         /[^0-9A-Z]/
       end
     end
@@ -78,6 +80,10 @@ module ValidationKit
 
         postal_code = format("%s %s", fsa, lda)
         postal_code.upcase
+
+      elsif %w[UK GB].include?(country_code)
+        # the inward code is always the last three characters
+        "#{postal_code[0...-3]} #{postal_code[-3..]}"
       end
     end
   end
