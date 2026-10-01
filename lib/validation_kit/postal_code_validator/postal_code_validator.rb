@@ -9,9 +9,9 @@ module ValidationKit
         nil
       elsif %w[AU NZ].include?(country_code)
         /\A\d{4}\z/
-      elsif ["US"].include?(country_code)
+      elsif country_code == "US"
         /\A\d{5}(?:-?\d{4})?\z/
-      elsif ["CA"].include?(country_code)
+      elsif country_code == "CA"
         /\A[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTWVXYZ] ?\d[ABCEGHJKLMNPRSTWVXYZ]\d\z/
       elsif %w[UK GB].include?(country_code)
         /\A(?:[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0AA)\z/
@@ -71,7 +71,7 @@ module ValidationKit
 
       postal_code = arg.to_s.gsub(disallowed_characters, "")
 
-      if ["US"].include?(country_code)
+      if country_code == "US"
         digit_count = postal_code.length
         if digit_count == 5
           postal_code
@@ -82,9 +82,9 @@ module ValidationKit
       elsif %w[AU NZ].include?(country_code)
         postal_code
 
-      elsif ["CA"].include?(country_code)
+      elsif country_code == "CA"
         # forward sortation area, then local delivery unit
-        "#{postal_code[0..2]} #{postal_code[3..5]}".upcase
+        "#{postal_code[0..2]} #{postal_code[3..5]}"
 
       elsif %w[UK GB].include?(country_code)
         # the inward code is always the last three characters
