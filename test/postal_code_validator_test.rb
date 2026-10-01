@@ -1,0 +1,57 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+class PostalCodeValidatorTest < Minitest::Test
+  class Address
+    include ActiveModel::Validations
+
+    attr_accessor :postcode, :country
+
+    validates :postcode, postal_code: { set: true }
+  end
+
+  def validate(postcode, country)
+    address = Address.new
+    address.postcode = postcode
+    address.country = country
+    [address.valid?, address.postcode]
+  end
+
+  def test_accepts_and_formats_valid_postal_codes
+    [
+      ["US", "10001", "10001"],
+      ["US", "10001-1234", "10001-1234"],
+      ["US", "100011234", "10001-1234"],
+      ["AU", "2000", "2000"],
+      ["NZ", "6011", "6011"],
+      ["CA", "k1a0b1", "K1A 0B1"],
+      ["CA", "K1A 0B1", "K1A 0B1"]
+    ].each do |country, postcode, formatted|
+      assert_equal [true, formatted], validate(postcode, country), "#{country} #{postcode}"
+    end
+  end
+
+  # These used to pass validation (the regexes were unanchored) and then be
+  # set to nil because they couldn't be formatted.
+  def test_rejects_postal_codes_with_the_wrong_length_and_keeps_the_value
+    {
+      "US" => %w[1234 123456 1234567 12345678 1234567890 123456789012],
+      "AU" => %w[123 12345],
+      "NZ" => %w[123 12345],
+      "CA" => %w[K1A0B K1A0B1X XK1A0B1]
+    }.each do |country, postcodes|
+      postcodes.each do |postcode|
+        assert_equal [false, postcode], validate(postcode, country), "#{country} #{postcode}"
+      end
+    end
+  end
+
+  def test_regex_for_country_accepts_formatted_and_unformatted_codes
+    validator = ValidationKit::PostalCodeValidator.new(attributes: [:postcode])
+
+    assert_match validator.postal_code_regex_for_country("US"), "10001-1234"
+    assert_match validator.postal_code_regex_for_country("CA"), "K1A 0B1"
+    refute_match validator.postal_code_regex_for_country("US"), "10001\n99999"
+  end
+end
