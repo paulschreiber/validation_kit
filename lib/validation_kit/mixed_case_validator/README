@@ -21,10 +21,9 @@ Attribute names are looked up using Rails' I18n system. Create a hierarchy like 
 
 en:
   activerecord:
-    models:
-      attributes:
-        person:
-            firstname: "first name"
+    attributes:
+      person:
+        firstname: "first name"
 
 Alternately, pass in the :attribute_name option:
 
@@ -37,18 +36,18 @@ Error Messages
 ==============
 Error messages follow the standard ActiveRecord lookup method.
 
-You'll likely error messages can be customized like so:
+Error messages can be customized like so:
 
 en:
   activerecord:
     errors:
       models:
-        attributes:
-          person:
+        person:
+          attributes:
             firstname:
               all_caps: "first name should not be in all caps"
 
-Alternatively, pass in tje :all_caps option:
+Alternatively, pass in the :all_caps option:
 
 class Person < ActiveRecord::Base
 	validates_mixed_case_of :firstname, :all_caps => "don't shout at me, bro"
