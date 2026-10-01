@@ -3,6 +3,8 @@
 module ValidationKit
   class PostalCodeValidator < ActiveModel::EachValidator
     def postal_code_regex_for_country(country_code)
+      country_code = country_code.to_s.strip.upcase
+
       if country_code.blank?
         nil
       elsif %w[AU NZ].include?(country_code)
@@ -17,6 +19,8 @@ module ValidationKit
     end
 
     def disallowed_characters_for_country(country_code)
+      country_code = country_code.to_s.strip.upcase
+
       if country_code.blank?
         nil
       elsif %w[US AU NZ].include?(country_code)
@@ -39,6 +43,10 @@ module ValidationKit
 
       return unless country
 
+      # accept "us", :US, " US " as well as "US"
+      country = country.to_s.strip.upcase
+      return if country.empty?
+
       current_regex = postal_code_regex_for_country(country)
       return unless current_regex
 
@@ -58,6 +66,7 @@ module ValidationKit
     end
 
     def format_as_postal_code(arg, country_code, disallowed_characters)
+      country_code = country_code.to_s.strip.upcase
       return nil if arg.blank? || country_code.blank? || !postal_code_regex_for_country(country_code)
 
       postal_code = arg.to_s.gsub(disallowed_characters, "")

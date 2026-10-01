@@ -3,6 +3,8 @@
 module ValidationKit
   class PhoneValidator < ActiveModel::EachValidator
     def regex_for_country(country_code)
+      country_code = country_code.to_s.strip.upcase
+
       if country_code.blank?
         nil
       elsif ["AU"].include?(country_code)
@@ -24,6 +26,10 @@ module ValidationKit
                 end
 
       return unless country
+
+      # accept "us", :US, " US " as well as "US"
+      country = country.to_s.strip.upcase
+      return if country.empty?
 
       current_regex = regex_for_country(country)
       return unless current_regex
@@ -47,6 +53,7 @@ module ValidationKit
     end
 
     def format_as_phone(arg, country_code = nil, area_key = nil)
+      country_code = country_code.to_s.strip.upcase
       return nil if arg.blank? || country_code.blank? || !regex_for_country(country_code)
 
       arg = arg.to_s
