@@ -1,42 +1,50 @@
-validates_as_postal_code
-=====================
+PostalCodeValidator
+===================
 
-Strict validation module for postal and zip codes.
+Strict validation for postal and ZIP codes.
 
-= General usage
+Installation
+============
 
-== Installation
+Add the gem to your Gemfile:
 
-You can install the plugin the traditional way. Go to your application root
-and do:
+  gem "validation_kit"
 
-  script/plugin install git://github.com/paulschreiber/validates_as_postal_code.git
+Usage
+=====
 
-== Validate your model attributes
+class Person < ActiveRecord::Base
+  validates :postal_code, postal_code: { country: "CA", set: true }, allow_blank: true
+end
 
-Example:
+There are three ways to specify the country. Country codes are
+case-insensitive ("CA", "ca", or :CA).
 
-There are three ways to specify the country:
- (1) Pass the country name in as a string parameter (:country => "CA")
- class Person < ActiveRecord::Base
-   validates_as_postal_code :postal_code, :country => "CA", :allow_blank => true
- end
+ (1) Pass the country code as a string:
 
- (2) Create an attribute (country field) named foo in your object, and pass in a reference to foo:
- class Person < ActiveRecord::Base
-   validates_as_postal_code :postal_code, :country => :foo
- end
+  validates :postal_code, postal_code: { country: "CA" }
 
- (3) Create an attribute named country it in your object, i.e. Person#country
-     i.e. country is the default name for your country field, and the validator tries that automatically
+ (2) Pass the name of a method on your model that returns the country code:
 
- class Person < ActiveRecord::Base
-   validates_as_postal_code :postal_code
- end
+  validates :postal_code, postal_code: { country: :billing_country }
 
-The :set parameter tells the validator to reformat the postal_code number (change punctuation and spacing) in to a standard format.
+ (3) Leave it out, and the validator calls your model's country method:
 
-Supported countries are Canada (CA), the United States (US), the United Kingdom (UK or GB), Australia (AU), and New Zealand (NZ). :set formats Canadian and UK codes with a space (K1A 0B1, SW1A 1AA) and US ZIP+4 codes with a hyphen (10001-1234).
+  validates :postal_code, postal_code: true
+
+Validation is skipped when the country isn't supported.
+
+Options
+=======
+
+  set: true       Reformat the stored value: Canadian and UK codes get a space
+                  (K1A 0B1, SW1A 1AA) and US ZIP+4 codes a hyphen (10001-1234).
+  message: "..."  A custom error message. Otherwise the standard :invalid
+                  error is added; translate it with
+                  activerecord.errors.models.person.attributes.postal_code.invalid.
+
+Supported countries are Canada (CA), the United States (US), the United
+Kingdom (UK or GB), Australia (AU), and New Zealand (NZ).
 
 
 = License

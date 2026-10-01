@@ -1,42 +1,51 @@
-Validates Mixed Case Of
-=======================
+MixedCaseValidator
+==================
 
-When validating a string item, ensure it is not all in capital or lowercase letters.
+When validating a string attribute, ensure it is not all in capital or
+lowercase letters. Values with fewer than three letters that have a case are
+skipped, so initials, digits, and scripts without case (e.g. Chinese) never
+fail.
+
+Installation
+============
+
+Add the gem to your Gemfile:
+
+  gem "validation_kit"
 
 Example
 =======
 
 class Person < ActiveRecord::Base
-	validates_mixed_case_of :firstname
+  validates :first_name, mixed_case: true
 end
 
-p = Person.new(:firstname => "BOB")
-p.valid?   # false
-p = Person.new(:firstname => "Bob")
-p.valid?   # true
+Person.new(first_name: "BOB").valid?  # false: "First name cannot be in all caps"
+Person.new(first_name: "bob").valid?  # false: "First name cannot be in all lowercase"
+Person.new(first_name: "Bob").valid?  # true
 
 Attribute Names
 ===============
-Attribute names are looked up using Rails' I18n system. Create a hierarchy like so:
+
+The %{item} in the message is the attribute's translated name:
 
 en:
   activerecord:
     attributes:
       person:
-        firstname: "first name"
+        first_name: "Given name"
 
-Alternately, pass in the :attribute_name option:
+Alternatively, pass the :attribute_name option:
 
-class Person < ActiveRecord::Base
-	validates_mixed_case_of :firstname, :attribute_name => "first name"
-end
+  validates :first_name, mixed_case: { attribute_name: "Given name" }
 
+Without either, the humanized attribute name ("First name") is used.
 
 Error Messages
 ==============
-Error messages follow the standard ActiveRecord lookup method.
 
-Error messages can be customized like so:
+Errors are added as :all_caps and :all_lowercase, so you can check them with
+errors.added?(:first_name, :all_caps) and translate them per model:
 
 en:
   activerecord:
@@ -44,15 +53,15 @@ en:
       models:
         person:
           attributes:
-            firstname:
-              all_caps: "first name should not be in all caps"
+            first_name:
+              all_caps: "Your first name cannot be in all caps"
+              all_lowercase: "Your first name cannot be in all lowercase"
 
-Alternatively, pass in the :all_caps option:
+or pass the :all_caps and :all_lowercase options:
 
-class Person < ActiveRecord::Base
-	validates_mixed_case_of :firstname, :all_caps => "don't shout at me, bro"
-end
+  validates :first_name, mixed_case: { all_caps: "don't shout at me, bro" }
 
+The default English and French messages live under errors.messages.
 
 
 Copyright 2011 Paul Schreiber, released under the MIT license
