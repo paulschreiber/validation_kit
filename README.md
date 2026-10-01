@@ -160,14 +160,12 @@ option, then the humanized attribute name.
 
 ## Credits
 
-- **Email, mixed case, and postal code validators:** Paul Schreiber
-  ([paulschreiber.com](http://paulschreiber.com/)), 2010–2011.
-- **Phone validator:** written by Kristina Lim
-  ([i-think.com.ph](http://i-think.com.ph/kristina/)), copyright © 2008 Syndeo
-  Media ([syndeomedia.com](http://syndeomedia.com)). Paul Schreiber added US
+- **Email, mixed case, and postal code validators:** ([Paul Schreiber](https://paulschreiber.com/)), 2010–2011.
+- **Phone validator:** written by Kristina Lim, copyright © 2008 Syndeo
+  Media. Paul Schreiber added US
   and Canada support (September 2010) and extension support (November 2010).
   It is named after, and was originally built on, Jerrod Blavos's
-  [validates_as_phone](http://code.google.com/p/validates-as-phone/) plugin.
+  [validates_as_phone](https://code.google.com/archive/p/validates-as-phone/) plugin.
 - **Gem:** co-authored by Wes Morgan.
 
 ## License
