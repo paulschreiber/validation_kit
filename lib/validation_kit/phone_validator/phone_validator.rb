@@ -6,7 +6,7 @@ module ValidationKit
       if country_code.blank?
         nil
       elsif ["AU"].include?(country_code)
-        /(^(1300|1800|1900|1902)\d{6}$)|(^(0?[1|2378])?[1-9][0-9]{7}$)|(^13\d{4}$)|(^0?4\d{8}$)/
+        /(^(1300|1800|1900|1902)\d{6}$)|(^(0?[12378])?[1-9][0-9]{7}$)|(^13\d{4}$)|(^0?4\d{8}$)/
       elsif %w[US CA].include?(country_code)
         /^1?[2-9]\d{2}[2-9]\d{2}\d{4}/
       end
@@ -60,9 +60,9 @@ module ValidationKit
         case number
         when /^(1300|1800|1900|1902)\d{6}$/
           number.insert(4, " ").insert(8, " ")
-        when /^(0?[1|2378])?[1-9][0-9]{7}$/
+        when /^(0?[12378])?[1-9][0-9]{7}$/
           number.insert(0, area_code_for_key(area_key)) if /^[1-9][0-9]{7}$/.match?(number)
-          number.insert(0, "0") if /^[1|2378][1-9][0-9]{7}$/.match?(number)
+          number.insert(0, "0") if /^[12378][1-9][0-9]{7}$/.match?(number)
 
           number.insert(0, "(").insert(3, ") ").insert(9, " ")
         when /^13\d{4}$/
