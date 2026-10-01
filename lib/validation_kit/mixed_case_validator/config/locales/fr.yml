@@ -1,6 +1,5 @@
 fr:
-  activerecord:
-    errors:
-      messages:
-        all_caps: "%{item} ne peut pas être en majuscules"
-        all_lowercase: "%{item} ne peut pas être en minuscules"
+  errors:
+    messages:
+      all_caps: "%{item} ne peut pas être en majuscules"
+      all_lowercase: "%{item} ne peut pas être en minuscules"

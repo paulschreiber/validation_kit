@@ -2,8 +2,9 @@
 
 module ValidationKit
   class MixedCaseValidator < ActiveModel::EachValidator
-    ALL_CAPS = 1
-    ALL_LOWERCASE = -1
+    # Error types, also used as the I18n keys and option names for custom messages.
+    ALL_CAPS = :all_caps
+    ALL_LOWERCASE = :all_lowercase
 
     def validate_each(record, attribute, value)
       return if value.nil?
@@ -19,27 +20,18 @@ module ValidationKit
 
       return if error.nil?
 
-      model_name = record.class.to_s
+      record.errors.add(attribute, error, item: item_name(record, attribute), message: options[error])
+    end
 
-      item_name = I18n.t("activerecord.attributes.#{model_name.underscore}.#{attribute}", default: nil) ||
-                  options[:attribute_name] ||
-                  attribute.to_s.humanize
+    private
 
-      if error == ALL_CAPS
-        message = I18n.t("activerecord.errors.models.#{model_name.underscore}.attributes.#{attribute}.all_caps",
-                         item: item_name,
-                         default: [:"activerecord.errors.models.#{model_name.underscore}.all_caps",
-                                   options[:all_caps],
-                                   :"activerecord.errors.messages.all_caps"])
-      elsif error == ALL_LOWERCASE
-        message = I18n.t("activerecord.errors.models.#{model_name.underscore}.attributes.#{attribute}.all_lowercase",
-                         item: item_name,
-                         default: [:"activerecord.errors.models.#{model_name.underscore}.all_lowercase",
-                                   options[:all_lowercase],
-                                   :"activerecord.errors.messages.all_lowercase"])
-      end
-
-      record.errors.add(attribute, message)
+    # A translated attribute name wins, then the :attribute_name option, then
+    # the humanized attribute name.
+    def item_name(record, attribute)
+      scope = [record.class.i18n_scope, :attributes, record.class.model_name.i18n_key]
+      I18n.t(attribute, scope:, default: nil) ||
+        options[:attribute_name] ||
+        record.class.human_attribute_name(attribute)
     end
   end
 end
