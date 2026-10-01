@@ -160,7 +160,7 @@ option, then the humanized attribute name.
 
 ## Credits
 
-- **Email, mixed case, and postal code validators:** ([Paul Schreiber](https://paulschreiber.com/)), 2010–2011.
+- **Email, mixed case, and postal code validators:** [Paul Schreiber](https://paulschreiber.com/), 2010–2011.
 - **Phone validator:** written by Kristina Lim, copyright © 2008 Syndeo
   Media. Paul Schreiber added US
   and Canada support (September 2010) and extension support (November 2010).
