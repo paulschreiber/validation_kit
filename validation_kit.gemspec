@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.required_ruby_version = ">= 3.4"
 
-  s.add_dependency "activemodel", ">= 7.1"
+  s.add_dependency "activemodel", ">= 7.2"
 
   s.metadata["rubygems_mfa_required"] = "true"
   s.metadata["source_code_uri"] = s.homepage

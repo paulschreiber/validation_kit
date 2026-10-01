@@ -2,7 +2,7 @@ PATH
   remote: ..
   specs:
     validation_kit (1.1.0)
-      activemodel (>= 7.1)
+      activemodel (>= 7.2)
 
 GEM
   remote: https://rubygems.org/
