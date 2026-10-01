@@ -131,6 +131,33 @@ Use `activemodel` instead of `activerecord` for classes that aren't
 ActiveRecord models. The gem includes English and French messages for the
 mixed case errors.
 
+## Translation keys
+
+Each validator adds an error of the type below. Rails looks up its message in
+this order, using the first key it finds. These are the keys for an
+ActiveRecord model `Person`; use `activemodel` instead of `activerecord` for
+other ActiveModel classes:
+
+1. `activerecord.errors.models.person.attributes.<attribute>.<type>`
+2. `activerecord.errors.models.person.<type>`
+3. `activerecord.errors.messages.<type>`
+4. `errors.attributes.<attribute>.<type>`
+5. `errors.messages.<type>`
+
+A `message:` option (or `all_caps:` / `all_lowercase:`) skips the lookup.
+
+| Validator     | Error type       | Default message (en)                 | Default message (fr)                     |
+| ------------- | ---------------- | ------------------------------------ | ---------------------------------------- |
+| `email`       | `:invalid`       | "is invalid" (from Rails)            | from Rails' locale files (e.g. rails-i18n) |
+| `phone`       | `:invalid`       | "is invalid" (from Rails)            | from Rails' locale files (e.g. rails-i18n) |
+| `postal_code` | `:invalid`       | "is invalid" (from Rails)            | from Rails' locale files (e.g. rails-i18n) |
+| `mixed_case`  | `:all_caps`      | "%{item} cannot be in all caps"      | "%{item} ne peut pas être en majuscules" |
+| `mixed_case`  | `:all_lowercase` | "%{item} cannot be in all lowercase" | "%{item} ne peut pas être en minuscules" |
+
+For mixed case, `%{item}` is the attribute's name: its translation at
+`activerecord.attributes.person.<attribute>`, then the `attribute_name:`
+option, then the humanized attribute name.
+
 ## Credits
 
 - Email, mixed case, and postal code validators by Paul Schreiber.
