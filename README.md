@@ -45,11 +45,11 @@ Person.new(first_name: "bob").valid? # => false, "First name cannot be in all lo
 Person.new(first_name: "Bob").valid? # => true
 ```
 
-| Option            | Description                                                                                         |
-| ----------------- | --------------------------------------------------------------------------------------------------- |
-| `attribute_name:` | Name to use in the message. Defaults to the translated attribute name, then the humanized one.      |
-| `all_caps:`       | Custom message for all-caps values.                                                                 |
-| `all_lowercase:`  | Custom message for all-lowercase values.                                                            |
+| Option            | Description                                                                                    |
+| ----------------- | ---------------------------------------------------------------------------------------------- |
+| `attribute_name:` | Name to use in the message. Defaults to the translated attribute name, then the humanized one. |
+| `all_caps:`       | Custom message for all-caps values.                                                            |
+| `all_lowercase:`  | Custom message for all-lowercase values.                                                       |
 
 ## Phone
 
@@ -62,10 +62,10 @@ class Person < ActiveRecord::Base
 end
 ```
 
-| Option      | Description                                                                                                                        |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `country:`  | See [Specifying the country](#specifying-the-country).                                                                             |
-| `set:`      | Reformat the stored value: `"1-212-555-1234 x5"` becomes `"(212) 555-1234 x5"`, `"0298765432"` becomes `"(02) 9876 5432"`.        |
+| Option      | Description                                                                                                                           |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `country:`  | See [Specifying the country](#specifying-the-country).                                                                                |
+| `set:`      | Reformat the stored value: `"1-212-555-1234 x5"` becomes `"(212) 555-1234 x5"`, `"0298765432"` becomes `"(02) 9876 5432"`.            |
 | `area_key:` | For Australian landlines entered without an area code, the state whose area code to add (`"VIC"`, `"QLD"`, …; default NSW/ACT, `02`). |
 
 ## Postal code
@@ -80,9 +80,9 @@ class Person < ActiveRecord::Base
 end
 ```
 
-| Option     | Description                                                                                                          |
-| ---------- | -------------------------------------------------------------------------------------------------------------------- |
-| `country:` | See [Specifying the country](#specifying-the-country).                                                               |
+| Option     | Description                                                                                                             |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `country:` | See [Specifying the country](#specifying-the-country).                                                                  |
 | `set:`     | Reformat the stored value: Canadian and UK codes get a space (`K1A 0B1`, `SW1A 1AA`), US ZIP+4 a hyphen (`10001-1234`). |
 
 ## Specifying the country
@@ -146,13 +146,13 @@ other ActiveModel classes:
 
 A `message:` option (or `all_caps:` / `all_lowercase:`) skips the lookup.
 
-| Validator     | Error type       | Default message (en)                 | Default message (fr)                     |
-| ------------- | ---------------- | ------------------------------------ | ---------------------------------------- |
+| Validator     | Error type       | Default message (en)                 | Default message (fr)                       |
+| ------------- | ---------------- | ------------------------------------ | ------------------------------------------ |
 | `email`       | `:invalid`       | "is invalid" (from Rails)            | from Rails' locale files (e.g. rails-i18n) |
 | `phone`       | `:invalid`       | "is invalid" (from Rails)            | from Rails' locale files (e.g. rails-i18n) |
 | `postal_code` | `:invalid`       | "is invalid" (from Rails)            | from Rails' locale files (e.g. rails-i18n) |
-| `mixed_case`  | `:all_caps`      | "%{item} cannot be in all caps"      | "%{item} ne peut pas être en majuscules" |
-| `mixed_case`  | `:all_lowercase` | "%{item} cannot be in all lowercase" | "%{item} ne peut pas être en minuscules" |
+| `mixed_case`  | `:all_caps`      | "%{item} cannot be in all caps"      | "%{item} ne peut pas être en majuscules"   |
+| `mixed_case`  | `:all_lowercase` | "%{item} cannot be in all lowercase" | "%{item} ne peut pas être en minuscules"   |
 
 For mixed case, `%{item}` is the attribute's name: its translation at
 `activerecord.attributes.person.<attribute>`, then the `attribute_name:`
