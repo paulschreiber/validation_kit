@@ -5,7 +5,7 @@ module ValidationKit
     def regex_for_country(country_code)
       if country_code.blank?
         nil
-      elsif ["AU"].include?(country_code)
+      elsif country_code == "AU"
         /\A(?:(?:1300|1800|1900|1902)\d{6}|(?:0?[12378])?[1-9][0-9]{7}|13\d{4}|0?4\d{8})\z/
       elsif %w[US CA].include?(country_code)
         /\A1?[2-9]\d{2}[2-9]\d{2}\d{4}/
