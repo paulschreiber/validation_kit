@@ -6,11 +6,11 @@ module ValidationKit
       if country_code.blank?
         nil
       elsif %w[AU NZ].include?(country_code)
-        /\d{4}/
+        /\A\d{4}\z/
       elsif ["US"].include?(country_code)
-        /\d{5}(-\d{4})?/
+        /\A\d{5}(?:-?\d{4})?\z/
       elsif ["CA"].include?(country_code)
-        /[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTWVXYZ]\d[ABCEGHJKLMNPRSTWVXYZ]\d/
+        /\A[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTWVXYZ] ?\d[ABCEGHJKLMNPRSTWVXYZ]\d\z/
       end
     end
 
