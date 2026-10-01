@@ -61,4 +61,12 @@ class PhoneValidatorTest < Minitest::Test
 
     assert_nil us.format_as_phone("519 444 000 ext 123", "US")
   end
+
+  def test_format_as_phone_returns_nil_for_numbers_it_cannot_format
+    validator = ValidationKit::PhoneValidator.new(attributes: [:phone])
+
+    { "US" => "555-1234", "CA" => "212555123", "AU" => "12345" }.each do |country, input|
+      assert_nil validator.format_as_phone(input, country), "#{country} #{input}"
+    end
+  end
 end
