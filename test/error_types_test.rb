@@ -37,6 +37,18 @@ class ErrorTypesTest < Minitest::Test
     assert_equal [{ error: :invalid }], errors.details[:email]
   end
 
+  # The README's error-type checks (of_kind?), and its note that added? needs
+  # item: for mixed case errors.
+  def test_the_readme_error_type_checks
+    errors = invalid
+
+    %i[email phone postcode].each do |attribute|
+      assert errors.of_kind?(attribute, :invalid), "#{attribute} not :invalid"
+    end
+    assert errors.of_kind?(:name, :all_caps)
+    refute errors.added?(:name, :all_caps), "added? needs item:, as the README says"
+  end
+
   def test_uses_the_default_messages_for_plain_active_model_models
     errors = invalid
 
