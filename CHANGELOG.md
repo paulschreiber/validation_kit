@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+### Changed
+
+- US and Canadian phone numbers with extra digits right after the number and no
+  extension marker in front of them (any letter, as in `x`, `ext` or
+  `extension`, or `#`, `＃` or `№`) are now invalid, with or without `set:`. A
+  mistyped number such as `212-555-12345` used to pass, and `set:` stored it as
+  `(212) 555-1234 5`. This includes non-ASCII digits such as `５`.
+- Without `set:`, a US or Canadian number with letters among its first ten
+  digits (`519 444 000 ext 123`) is now invalid, as it already was with `set:`.
+- With `set:`, a stored extension no longer keeps a leading `,` or `;` or
+  surrounding spaces (including non-breaking ones): `212-555-1234, ext 5`
+  becomes `(212) 555-1234 ext 5`. An extension written with non-ASCII digits
+  (`x５`) is kept instead of being dropped. Other marked extensions (`x5`,
+  `ext. 99`, `(x5)`, `#5`, …) are stored as before.
+
 ### Fixed
 
 - The phone validator's `area_key:` (and `format_as_phone`'s area key) now
