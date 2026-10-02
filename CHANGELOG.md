@@ -45,6 +45,12 @@
   accepts Australian states in any case, as a string or symbol, like country
   codes. `:vic` or `"vic"` used to silently get the NSW/ACT area code (02).
 
+### Documentation
+
+- The README's error-type example used `errors.added?(:first_name, :all_caps)`,
+  which is always false for mixed case errors because they carry an `item:`
+  option. It now uses `of_kind?`, and explains when `added?` needs `item:`.
+
 ## 2.0.0 (2026-10-01)
 
 ### Breaking changes
