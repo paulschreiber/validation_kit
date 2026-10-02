@@ -62,11 +62,11 @@ class Person < ActiveRecord::Base
 end
 ```
 
-| Option      | Description                                                                                                                                       |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `country:`  | See [Specifying the country](#specifying-the-country).                                                                                            |
-| `set:`      | Reformat the stored value: `"1-212-555-1234 x5"` becomes `"(212) 555-1234 x5"`, `"0298765432"` becomes `"(02) 9876 5432"`.                        |
-| `area_key:` | For Australian landlines entered without an area code, the state whose area code to add (`"VIC"`, `:qld`, …, in any case; default NSW/ACT, `02`). |
+| Option      | Description                                                                                                                                                                                                                                                                                                                             |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `country:`  | See [Specifying the country](#specifying-the-country).                                                                                                                                                                                                                                                                                  |
+| `set:`      | Reformat the stored value: `"1-212-555-1234 x5"` becomes `"(212) 555-1234 x5"`, `"0298765432"` becomes `"(02) 9876 5432"`.                                                                                                                                                                                                              |
+| `area_key:` | For Australian landlines entered without an area code, the state whose area code to add: `NSW`, `ACT`, `VIC`, `TAS`, `QLD`, `SA`, `NT` or `WA`, in any case, as a string or symbol (`"VIC"`, `:qld`). It's always a fixed state, not a method name. Leave it out (or blank) for NSW/ACT (`02`); any other value raises `ArgumentError`. |
 
 A US or Canadian number may end with an extension, which needs a marker in
 front of its digits: any letter (as in `x`, `ext` or `extension`), or `#`, `＃`
