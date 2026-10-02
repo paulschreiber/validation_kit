@@ -3,7 +3,8 @@ name: Release
 # Publishes the version in lib/validation_kit/version.rb to RubyGems.org with
 # trusted publishing (no API key). Run it manually from the Actions tab after
 # bumping the version on main. `rake release` builds the gem, tags the commit
-# (v<version>), pushes the tag, and pushes the gem.
+# the run is for (v<version>), pushes only the tag (see Rakefile), and pushes
+# the gem.
 on:
   workflow_dispatch:
 
