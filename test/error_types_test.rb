@@ -41,7 +41,7 @@ class ErrorTypesTest < Minitest::Test
     errors = invalid
 
     assert_equal ["is invalid"], errors[:email]
-    assert_equal ["Name cannot be in all caps"], errors[:name]
+    assert_equal ["cannot be in all caps"], errors[:name]
   end
 
   def test_uses_model_specific_translations_in_the_models_scope
