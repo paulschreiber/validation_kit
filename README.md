@@ -45,11 +45,11 @@ Person.new(first_name: "bob").valid? # => false, "First name cannot be in all lo
 Person.new(first_name: "Bob").valid? # => true
 ```
 
-| Option            | Description                                                                                                                                                                              |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `attribute_name:` | Name for `%{item}` in a custom message. Defaults to the translated attribute name, then the humanized one. It doesn’t change `full_messages`, which use the attribute’s translated name. |
-| `all_caps:`       | Custom message for all-caps values.                                                                                                                                                      |
-| `all_lowercase:`  | Custom message for all-lowercase values.                                                                                                                                                 |
+| Option            | Description                                                                                                                                                                            |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `attribute_name:` | Name for `%{item}` in a custom message, used when the attribute has no translation (a translation wins). It doesn’t change `full_messages`, which use the attribute’s translated name. |
+| `all_caps:`       | Custom message for all-caps values.                                                                                                                                                    |
+| `all_lowercase:`  | Custom message for all-lowercase values.                                                                                                                                               |
 
 ## Phone
 
@@ -112,9 +112,15 @@ validates :phone, phone: true
 Errors are added with standard types, so the usual ActiveModel tools work:
 
 ```ruby
-person.errors.added?(:email, :invalid)        # email, phone, postal code
-person.errors.added?(:first_name, :all_caps)  # mixed case (also :all_lowercase)
+person.errors.of_kind?(:email, :invalid)        # email, phone, postal code
+person.errors.of_kind?(:first_name, :all_caps)  # mixed case (also :all_lowercase)
 ```
+
+`of_kind?` checks the attribute and error type. `added?` also compares the
+error's options, and mixed case errors carry an `item:` option (the
+attribute's name, for messages that use `%{item}`; see
+[Translation keys](#translation-keys) for how it's chosen), so for them
+`added?` only matches if you pass the same `item:`.
 
 Pass `message:` (or `all_caps:` / `all_lowercase:` for mixed case) for a custom
 message, or translate it like any other Rails validation error:
