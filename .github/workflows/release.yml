@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   # The full test matrix (every Ruby and activemodel version the gemspec
-  # supports) on the commit being released, not just one Ruby.
+  # supports) and lint, on the commit being released.
   tests:
     name: Tests
     if: github.repository == 'paulschreiber/validation_kit' && startsWith(github.ref, 'refs/tags/v')
@@ -27,9 +27,16 @@ jobs:
     permissions:
       contents: read
 
+  lint:
+    name: Lint
+    if: github.repository == 'paulschreiber/validation_kit' && startsWith(github.ref, 'refs/tags/v')
+    uses: ./.github/workflows/lint.yml
+    permissions:
+      contents: read
+
   release:
     name: Release to RubyGems.org
-    needs: tests
+    needs: [tests, lint]
     # Only release v* tags in this repository, not forks. The release
     # environment only allows v* tags, and a tag ruleset limits who can make
     # them.
