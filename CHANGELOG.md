@@ -4,6 +4,11 @@
 
 ### Breaking changes
 
+- An `area_key:` that isn't an Australian state or territory (NSW, ACT, VIC,
+  TAS, QLD, SA, NT, WA, in any case) now raises `ArgumentError` when the model
+  is defined, and `format_as_phone` raises for one too. It used to silently add
+  the NSW/ACT area code (02), so `"Victoria"` or a typo stored a wrong number.
+  Leaving `area_key:` out still means NSW/ACT.
 - A symbol `country:` option that's neither a method on the model nor a
   two-letter country code (such as a misspelled method name,
   `country: :billing_contry`) now raises `ArgumentError` when validating. It
@@ -42,8 +47,8 @@
   validator used the model's `country` method instead, or skipped validation
   silently.
 - The phone validator's `area_key:` (and `format_as_phone`'s area key) now
-  accepts Australian states in any case, as a string or symbol, like country
-  codes. `:vic` or `"vic"` used to silently get the NSW/ACT area code (02).
+  accepts Australian states in any case, as a string or symbol. `:vic` or
+  `"vic"` used to silently get the NSW/ACT area code (02).
 
 ### Documentation
 

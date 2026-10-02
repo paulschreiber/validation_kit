@@ -9,6 +9,19 @@ module ValidationKit
     # 212-555-12345, not an extension. \p{Nd} also catches non-ASCII digits.
     UNMARKED_US_CA_EXTENSION = /\A[^[:alpha:]#＃№]*\p{Nd}/
 
+    # Australian states and territories (the area_key: values), and the
+    # landline area code each one adds.
+    AU_AREA_CODES = {
+      "NSW" => "02", "ACT" => "02", "VIC" => "03", "TAS" => "03",
+      "QLD" => "07", "SA" => "08", "NT" => "08", "WA" => "08"
+    }.freeze
+
+    # area_key: is a fixed state, so a typo fails when the model is loaded
+    # rather than silently adding the wrong area code.
+    def check_validity!
+      area_code_for_key(options[:area_key])
+    end
+
     def regex_for_country(country_code)
       country_code = country_code.to_s.strip.upcase
 
@@ -56,6 +69,8 @@ module ValidationKit
     end
 
     def format_as_phone(arg, country_code = nil, area_key = nil)
+      # Checked first, so a bad key always raises, whatever number is passed.
+      area_code = area_code_for_key(area_key)
       country_code = country_code.to_s.strip.upcase
       return nil if arg.blank? || country_code.blank? || !regex_for_country(country_code)
 
@@ -67,7 +82,7 @@ module ValidationKit
         when /\A(?:1300|1800|1900|1902)\d{6}\z/
           number.insert(4, " ").insert(8, " ")
         when /\A(?:0?[12378])?[1-9][0-9]{7}\z/
-          number.insert(0, area_code_for_key(area_key)) if /\A[1-9][0-9]{7}\z/.match?(number)
+          number.insert(0, area_code) if /\A[1-9][0-9]{7}\z/.match?(number)
           number.insert(0, "0") if /\A[12378][1-9][0-9]{7}\z/.match?(number)
 
           number.insert(0, "(").insert(3, ") ").insert(9, " ")
@@ -114,15 +129,17 @@ module ValidationKit
       end
     end
 
-    # key is an AU state, in any case, as a string or symbol (like country
-    # codes).
+    # key is an AU state, in any case, as a string or symbol (always the state
+    # itself, never a method name); nil or blank means NSW/ACT. Anything else
+    # raises, rather than silently adding the NSW/ACT code (02) to, say, a
+    # Victorian number.
     def area_code_for_key(key)
-      case key.to_s.strip.upcase
-      when "VIC", "TAS" then "03"
-      when "QLD" then "07"
-      when "SA", "NT", "WA" then "08"
-      else
-        "02" # NSW, ACT, and the default
+      state = key.to_s.strip.upcase
+      return AU_AREA_CODES["NSW"] if state.empty?
+
+      AU_AREA_CODES.fetch(state) do
+        raise ArgumentError, "area_key: #{key.inspect} isn't an Australian state or territory " \
+                             "(#{AU_AREA_CODES.keys.join(", ")})"
       end
     end
   end
