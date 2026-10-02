@@ -68,6 +68,11 @@ end
 | `set:`      | Reformat the stored value: `"1-212-555-1234 x5"` becomes `"(212) 555-1234 x5"`, `"0298765432"` becomes `"(02) 9876 5432"`.                        |
 | `area_key:` | For Australian landlines entered without an area code, the state whose area code to add (`"VIC"`, `:qld`, …, in any case; default NSW/ACT, `02`). |
 
+A US or Canadian number may end with an extension, which needs a marker in
+front of its digits: any letter (as in `x`, `ext` or `extension`), or `#`, `＃`
+or `№` (`"212-555-1234 ext 5"`). Digits right after the number with no marker,
+as in `"212-555-12345"`, make it invalid.
+
 ## Postal code
 
 Strict validation for postal and ZIP codes in the United States (`US`), Canada

@@ -2,6 +2,11 @@
 
 module ValidationKit
   class PhoneValidator < ActiveModel::EachValidator
+    # Digits right after a US/CA number with no marker in front of them (any
+    # letter, as in x, ext or extension, or #, ＃ or №): a mistyped number like
+    # 212-555-12345, not an extension. \p{Nd} also catches non-ASCII digits.
+    UNMARKED_US_CA_EXTENSION = /\A[^[:alpha:]#＃№]*\p{Nd}/
+
     def regex_for_country(country_code)
       country_code = country_code.to_s.strip.upcase
 
@@ -38,7 +43,12 @@ module ValidationKit
 
       # allow_blank/allow_nil are handled by ActiveModel on the original value,
       # so input that only becomes blank once cleaned up (e.g. "n/a") is invalid.
-      if current_regex.match?(new_value)
+      valid = current_regex.match?(new_value)
+      # The US/CA regex only checks the start of the digits; format_as_phone is
+      # what rejects extra digits that aren't a marked extension.
+      valid &&= !format_as_phone(value, country).nil? if %w[US CA].include?(country)
+
+      if valid
         if options[:set]
           formatted_phone = format_as_phone(value, country, options[:area_key])
           if formatted_phone.nil?
@@ -79,7 +89,8 @@ module ValidationKit
         # if it's too short
         return nil if number.length < 10
 
-        # strip off the leading 1 (country code); any digits beyond ten are an extension
+        # strip off the leading 1 (country code); any digits beyond ten are an
+        # extension, unless they're unmarked (UNMARKED_US_CA_EXTENSION)
         leading_one = number.length > 10 && number.start_with?("1")
         number = number[1..] if leading_one
 
@@ -87,17 +98,23 @@ module ValidationKit
         exchange = number[3..5]
         sln = number[6..9]
 
-        if number.length == 10
-          extension = nil
-        else
-          # save everything after the last digit of the number as the extension
-          national = arg[/\A(?:\D*\d){#{leading_one ? 11 : 10}}/]
-          # if letters appear among those digits, the extension's digits were
-          # counted as part of the number (e.g. 519 444 000 ext 123), so return
-          # nil to error out
-          return nil if national.sub(/\A\D*/, "").match?(/[[:alpha:]]/)
+        # everything after the last digit of the number
+        national = arg[/\A(?:\D*\d){#{leading_one ? 11 : 10}}/]
+        rest = arg[national.length..]
 
-          extension = " #{arg[national.length..].strip}"
+        # if letters appear among the number's digits, the extension's digits
+        # were counted as part of the number (e.g. 519 444 000 ext 123), so
+        # return nil to error out
+        return nil if number.length > 10 && national.sub(/\A\D*/, "").match?(/[[:alpha:]]/)
+
+        # Text after the number with no digits in it (e.g. "(cell)") is dropped;
+        # with digits, it's the extension, if they're marked as one.
+        extension = nil
+        if rest.match?(/\p{Nd}/)
+          return nil if UNMARKED_US_CA_EXTENSION.match?(rest)
+
+          # [[:space:]] also covers non-breaking spaces, which strip doesn't
+          extension = " #{rest.strip.sub(/\A[[:space:],;]+/, "").sub(/[[:space:]]+\z/, "")}"
         end
 
         "(#{area_code}) #{exchange}-#{sln}#{extension}"
