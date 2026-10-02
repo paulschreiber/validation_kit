@@ -1,11 +1,13 @@
 name: Release
 
 # Publishes the version in lib/validation_kit/version.rb to RubyGems.org with
-# trusted publishing (no API key). Run it manually from the Actions tab after
-# bumping the version on main. `rake release` builds the gem, tags the commit
-# (v<version>), pushes the tag, and pushes the gem.
+# trusted publishing (no API key). After bumping the version on main, publish a
+# GitHub Release with the tag v<version> on main. The tag then already exists,
+# so `rake release` skips its tag and branch pushes and only builds and pushes
+# the gem; the job doesn't need write access to the repository.
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
 
 permissions:
   contents: read
@@ -20,7 +22,7 @@ jobs:
   # supports) on the commit being released, not just one Ruby.
   tests:
     name: Tests
-    if: github.repository == 'paulschreiber/validation_kit' && github.ref == 'refs/heads/main'
+    if: github.repository == 'paulschreiber/validation_kit' && startsWith(github.ref, 'refs/tags/v')
     uses: ./.github/workflows/test.yml
     permissions:
       contents: read
@@ -28,14 +30,16 @@ jobs:
   release:
     name: Release to RubyGems.org
     needs: tests
-    # Only release from main in this repository, not from forks or branches.
-    if: github.repository == 'paulschreiber/validation_kit' && github.ref == 'refs/heads/main'
+    # Only release v* tags in this repository, not forks. The release
+    # environment only allows v* tags, and a tag ruleset limits who can make
+    # them.
+    if: github.repository == 'paulschreiber/validation_kit' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     # Must match the environment in the RubyGems.org trusted publisher.
     environment: release
 
     permissions:
-      contents: write # rake release pushes the version tag
+      contents: read # the tag already exists, so nothing is pushed
       id-token: write # trusted publishing to RubyGems.org
 
     steps:
