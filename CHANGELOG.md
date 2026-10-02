@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- The phone validator's `area_key:` (and `format_as_phone`'s area key) now
+  accepts Australian states in any case, as a string or symbol, like country
+  codes. `:vic` or `"vic"` used to silently get the NSW/ACT area code (02).
+
 ## 2.0.0 (2026-10-01)
 
 ### Breaking changes

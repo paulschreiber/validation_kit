@@ -62,11 +62,11 @@ class Person < ActiveRecord::Base
 end
 ```
 
-| Option      | Description                                                                                                                           |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `country:`  | See [Specifying the country](#specifying-the-country).                                                                                |
-| `set:`      | Reformat the stored value: `"1-212-555-1234 x5"` becomes `"(212) 555-1234 x5"`, `"0298765432"` becomes `"(02) 9876 5432"`.            |
-| `area_key:` | For Australian landlines entered without an area code, the state whose area code to add (`"VIC"`, `"QLD"`, …; default NSW/ACT, `02`). |
+| Option      | Description                                                                                                                                       |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `country:`  | See [Specifying the country](#specifying-the-country).                                                                                            |
+| `set:`      | Reformat the stored value: `"1-212-555-1234 x5"` becomes `"(212) 555-1234 x5"`, `"0298765432"` becomes `"(02) 9876 5432"`.                        |
+| `area_key:` | For Australian landlines entered without an area code, the state whose area code to add (`"VIC"`, `:qld`, …, in any case; default NSW/ACT, `02`). |
 
 ## Postal code
 
