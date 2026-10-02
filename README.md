@@ -45,11 +45,11 @@ Person.new(first_name: "bob").valid? # => false, "First name cannot be in all lo
 Person.new(first_name: "Bob").valid? # => true
 ```
 
-| Option            | Description                                                                                    |
-| ----------------- | ---------------------------------------------------------------------------------------------- |
-| `attribute_name:` | Name to use in the message. Defaults to the translated attribute name, then the humanized one. |
-| `all_caps:`       | Custom message for all-caps values.                                                            |
-| `all_lowercase:`  | Custom message for all-lowercase values.                                                       |
+| Option            | Description                                                                                                                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `attribute_name:` | Name for `%{item}` in a custom message. Defaults to the translated attribute name, then the humanized one. It doesn’t change `full_messages`, which use the attribute’s translated name. |
+| `all_caps:`       | Custom message for all-caps values.                                                                                                                                                      |
+| `all_lowercase:`  | Custom message for all-lowercase values.                                                                                                                                                 |
 
 ## Phone
 
@@ -127,13 +127,14 @@ en:
         person:
           attributes:
             email:
-              invalid: "Enter your email address"
+              invalid: "doesn’t look like an email address"
             first_name:
-              all_caps: "Your first name cannot be in all caps"
+              all_caps: "can’t be all capitals"
 ```
 
-Use `activemodel` instead of `activerecord` for classes that aren't
-ActiveRecord models. The gem includes English and French messages for the
+Like Rails’ own messages, these leave out the attribute’s name, because
+`full_messages` adds it: "First name can’t be all capitals". Use `activemodel`
+instead of `activerecord` for classes that aren't ActiveRecord models. The gem includes English and French messages for the
 mixed case errors.
 
 ## Translation keys
@@ -151,17 +152,19 @@ other ActiveModel classes:
 
 A `message:` option (or `all_caps:` / `all_lowercase:`) skips the lookup.
 
-| Validator     | Error type       | Default message (en)                 | Default message (fr)                       |
-| ------------- | ---------------- | ------------------------------------ | ------------------------------------------ |
-| `email`       | `:invalid`       | "is invalid" (from Rails)            | from Rails' locale files (e.g. rails-i18n) |
-| `phone`       | `:invalid`       | "is invalid" (from Rails)            | from Rails' locale files (e.g. rails-i18n) |
-| `postal_code` | `:invalid`       | "is invalid" (from Rails)            | from Rails' locale files (e.g. rails-i18n) |
-| `mixed_case`  | `:all_caps`      | "%{item} cannot be in all caps"      | "%{item} ne peut pas être en majuscules"   |
-| `mixed_case`  | `:all_lowercase` | "%{item} cannot be in all lowercase" | "%{item} ne peut pas être en minuscules"   |
+| Validator     | Error type       | Default message (en)         | Default message (fr)                       |
+| ------------- | ---------------- | ---------------------------- | ------------------------------------------ |
+| `email`       | `:invalid`       | "is invalid" (from Rails)    | from Rails' locale files (e.g. rails-i18n) |
+| `phone`       | `:invalid`       | "is invalid" (from Rails)    | from Rails' locale files (e.g. rails-i18n) |
+| `postal_code` | `:invalid`       | "is invalid" (from Rails)    | from Rails' locale files (e.g. rails-i18n) |
+| `mixed_case`  | `:all_caps`      | "cannot be in all caps"      | "ne peut pas être en majuscules"           |
+| `mixed_case`  | `:all_lowercase` | "cannot be in all lowercase" | "ne peut pas être en minuscules"           |
 
-For mixed case, `%{item}` is the attribute's name: its translation at
-`activerecord.attributes.person.<attribute>`, then the `attribute_name:`
-option, then the humanized attribute name.
+Like Rails' own messages, the mixed case messages leave out the attribute's
+name, which `full_messages` adds: "First name cannot be in all caps". A custom
+message or translation can include it as `%{item}`: the attribute's
+translation at `activerecord.attributes.person.<attribute>`, then the
+`attribute_name:` option, then the humanized attribute name.
 
 ## Credits
 

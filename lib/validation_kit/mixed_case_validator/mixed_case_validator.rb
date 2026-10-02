@@ -23,6 +23,9 @@ module ValidationKit
 
       return if error.nil?
 
+      # The bundled messages leave the name to full_messages, like Rails' own.
+      # item: is still passed for custom messages and translations that use
+      # %{item}.
       record.errors.add(attribute, error, item: item_name(record, attribute), message: options[error])
     end
 

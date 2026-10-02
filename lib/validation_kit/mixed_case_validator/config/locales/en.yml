@@ -1,5 +1,5 @@
 en:
   errors:
     messages:
-      all_caps: "%{item} cannot be in all caps"
-      all_lowercase: "%{item} cannot be in all lowercase"
+      all_caps: "cannot be in all caps"
+      all_lowercase: "cannot be in all lowercase"

@@ -1,5 +1,5 @@
 fr:
   errors:
     messages:
-      all_caps: "%{item} ne peut pas être en majuscules"
-      all_lowercase: "%{item} ne peut pas être en minuscules"
+      all_caps: "ne peut pas être en majuscules"
+      all_lowercase: "ne peut pas être en minuscules"
