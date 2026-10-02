@@ -29,6 +29,10 @@ Person.new(email: "Bob").valid?            # => false
 Person.new(email: "joe@foobar.com").valid? # => true
 ```
 
+Addresses are limited to 254 characters, and 64 before the `@` (RFC 5321). To
+check an address outside a model, use
+`ValidationKit::EmailValidator.valid_address?("joe@foobar.com")`.
+
 ## Mixed case
 
 Validates that a string isn't all capitals or all lowercase. Values with fewer

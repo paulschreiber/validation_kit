@@ -4,6 +4,13 @@
 
 ### Breaking changes
 
+- The email length limits (254 characters in all, 64 before the `@`) now count
+  every character, as RFC 5321 does, including the quotes around a quoted local
+  part and each backslash escape. So a quoted local part of 63 characters plus
+  its quotes, which used to pass, is now too long. The limits are checked by
+  the validator and the new `ValidationKit::EmailValidator.valid_address?`, not
+  by `EMAIL_ADDRESS_RE`: code that uses the regex directly no longer gets them,
+  and should call `valid_address?` instead.
 - An `area_key:` that isn't an Australian state or territory (NSW, ACT, VIC,
   TAS, QLD, SA, NT, WA, in any case) now raises `ArgumentError` when the model
   is defined, and `format_as_phone` raises for one too. It used to silently add
@@ -42,6 +49,13 @@
   `ext. 99`, `(x5)`, `#5`, …) are stored as before.
 ### Fixed
 
+- The email validator still backtracked catastrophically on input with quote
+  characters, despite the 2.0.0 fix: `'a"' * 28 + "@"` (57 characters) took
+  about a minute to reject. The two length checks at the start of the regex
+  caused it; they're now plain length checks, and that input fails in well
+  under a millisecond.
+- Email addresses with non-ASCII letters that case-fold to ASCII ones, such as
+  `a@ſx.com`, are rejected, like every other non-ASCII address.
 - `country: :CA` (or `:ca`) now validates as Canada, as the README says. A
   symbol was only ever treated as a method name, so without a `CA` method the
   validator used the model's `country` method instead, or skipped validation
