@@ -30,8 +30,8 @@ jobs:
         # release, not the .0 release.
         gemfile:
           - Gemfile
-          - gemfiles/activemodel_8_0.gemfile
-          - gemfiles/activemodel_7_2.gemfile
+          - gemfiles/activemodel_8_0/Gemfile
+          - gemfiles/activemodel_7_2/Gemfile
 
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
