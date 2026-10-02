@@ -6,6 +6,8 @@ on:
     branches: [main]
   pull_request:
   merge_group:
+  # The release workflow runs this whole matrix before publishing.
+  workflow_call:
 
 permissions:
   contents: read
