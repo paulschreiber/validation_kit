@@ -97,8 +97,9 @@ case-insensitive (`"CA"`, `"ca"`, or `:CA`), and validation is skipped when the
 country isn't supported.
 
 ```ruby
-# A fixed country code
+# A fixed country code, as a string or a two-letter symbol
 validates :phone, phone: { country: "CA" }
+validates :phone, phone: { country: :ca }
 
 # The name of a method on your model that returns the country code
 validates :phone, phone: { country: :billing_country }
@@ -106,6 +107,14 @@ validates :phone, phone: { country: :billing_country }
 # Neither: the validator calls your model's country method
 validates :phone, phone: true
 ```
+
+A symbol is a method name if your model has that public method; otherwise a
+two-letter symbol is a country code. Any other symbol (such as a misspelled
+method name) raises `ArgumentError` when validating, rather than skipping
+validation. Two things that check can't catch: a misspelled two-letter method
+name is read as a country code (and skipped if that country isn't supported),
+and with `allow_nil:` or `allow_blank:` it only runs once the attribute has a
+value.
 
 ## Error messages
 

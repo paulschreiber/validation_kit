@@ -4,6 +4,11 @@
 
 ### Breaking changes
 
+- A symbol `country:` option that's neither a method on the model nor a
+  two-letter country code (such as a misspelled method name,
+  `country: :billing_contry`) now raises `ArgumentError` when validating. It
+  used to fall back to the model's `country` method, or skip validation
+  silently.
 - The bundled mixed case messages no longer start with the attribute's name, so
   `full_messages` names it once ("First name cannot be in all caps", not "First
   name First name cannot be in all caps"), like Rails' own messages:
@@ -32,6 +37,10 @@
   `ext. 99`, `(x5)`, `#5`, …) are stored as before.
 ### Fixed
 
+- `country: :CA` (or `:ca`) now validates as Canada, as the README says. A
+  symbol was only ever treated as a method name, so without a `CA` method the
+  validator used the model's `country` method instead, or skipped validation
+  silently.
 - The phone validator's `area_key:` (and `format_as_phone`'s area key) now
   accepts Australian states in any case, as a string or symbol, like country
   codes. `:vic` or `"vic"` used to silently get the NSW/ACT area code (02).
