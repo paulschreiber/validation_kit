@@ -28,13 +28,14 @@ repos:
         language: system
         types: [ruby]
 
+  # The hook installs the prettier version matching its rev, so Dependabot's
+  # rev bumps upgrade prettier itself. No additional_dependencies: a second
+  # pin there would override it and drift.
   - repo: https://github.com/JoC0de/pre-commit-prettier
     rev: v3.9.8
     hooks:
       - id: prettier
         files: \.ya?ml$
-        additional_dependencies:
-          - prettier@3.9.8
 
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v4.4.0
