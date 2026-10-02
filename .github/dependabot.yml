@@ -16,8 +16,13 @@ updates:
     cooldown:
       default-days: 7
 
+  # Each gemfiles/ entry in the test matrix has its own directory with a
+  # plain Gemfile, the only name Dependabot's bundler support reads.
   - package-ecosystem: "bundler"
-    directory: "/"
+    directories:
+      - "/"
+      - "/gemfiles/activemodel_7_2"
+      - "/gemfiles/activemodel_8_0"
     schedule:
       interval: "weekly"
       day: "sunday"

@@ -1,5 +1,5 @@
 PATH
-  remote: ..
+  remote: ../..
   specs:
     validation_kit (2.0.0)
       activemodel (>= 7.2)
