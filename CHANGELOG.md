@@ -2,9 +2,6 @@
 
 ## 2.0.1 (2026-10-02)
 
-Released the day after 2.0.0, before anyone had adopted it, so it includes
-changes that would otherwise have waited for 3.0.0.
-
 ### Breaking changes
 
 - The email length limits (254 characters in all, 64 before the `@`) now count
