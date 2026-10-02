@@ -2,6 +2,8 @@
 
 module ValidationKit
   class PostalCodeValidator < ActiveModel::EachValidator
+    include CountryOption
+
     def postal_code_regex_for_country(country_code)
       country_code = country_code.to_s.strip.upcase
 
@@ -31,16 +33,7 @@ module ValidationKit
     end
 
     def validate_each(record, attribute, value)
-      country = if options[:country].is_a?(String)
-                  options[:country]
-                elsif options[:country].is_a?(Symbol) && record.respond_to?(options[:country])
-                  record.public_send(options[:country])
-                elsif record.respond_to?(:country)
-                  record.country
-                else
-                  false
-                end
-
+      country = country_for(record)
       return unless country
 
       # accept "us", :US, " US " as well as "US"

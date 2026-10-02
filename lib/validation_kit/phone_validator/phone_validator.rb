@@ -2,6 +2,8 @@
 
 module ValidationKit
   class PhoneValidator < ActiveModel::EachValidator
+    include CountryOption
+
     # Digits right after a US/CA number with no marker in front of them (any
     # letter, as in x, ext or extension, or #, ＃ or №): a mistyped number like
     # 212-555-12345, not an extension. \p{Nd} also catches non-ASCII digits.
@@ -20,16 +22,7 @@ module ValidationKit
     end
 
     def validate_each(record, attribute, value)
-      country = if options[:country].is_a?(String)
-                  options[:country]
-                elsif options[:country].is_a?(Symbol) && record.respond_to?(options[:country])
-                  record.public_send(options[:country])
-                elsif record.respond_to?(:country)
-                  record.country
-                else
-                  false
-                end
-
+      country = country_for(record)
       return unless country
 
       # accept "us", :US, " US " as well as "US"

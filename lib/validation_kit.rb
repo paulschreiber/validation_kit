@@ -3,6 +3,7 @@
 require "active_model"
 require "active_support/core_ext/string/inflections"
 require "validation_kit/version"
+require "validation_kit/country_option"
 
 module ValidationKit
   VALIDATORS = {} # rubocop:disable Style/MutableConstant -- filled below, then frozen
