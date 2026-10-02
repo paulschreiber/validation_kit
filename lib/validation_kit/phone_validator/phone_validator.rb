@@ -104,8 +104,10 @@ module ValidationKit
       end
     end
 
+    # key is an AU state, in any case, as a string or symbol (like country
+    # codes).
     def area_code_for_key(key)
-      case key
+      case key.to_s.strip.upcase
       when "VIC", "TAS" then "03"
       when "QLD" then "07"
       when "SA", "NT", "WA" then "08"
