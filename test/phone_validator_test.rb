@@ -28,6 +28,14 @@ class PhoneValidatorTest < Minitest::Test
     assert_equal "(03) 9876 5432", validator.format_as_phone("9876 5432", "AU", "VIC")
   end
 
+  def test_au_area_keys_ignore_case_and_type
+    ["VIC", "vic", :vic, :VIC, " Vic "].each do |key|
+      assert_equal "(03) 9876 5432", validator.format_as_phone("9876 5432", "AU", key), key.inspect
+    end
+    assert_equal "(07) 9876 5432", validator.format_as_phone("9876 5432", "AU", :qld)
+    assert_equal "(08) 9876 5432", validator.format_as_phone("9876 5432", "AU", "wa")
+  end
+
   def test_formats_us_numbers_with_a_leading_country_code_without_a_trailing_space
     us = ValidationKit::PhoneValidator.new(attributes: [:phone], country: "US")
 
