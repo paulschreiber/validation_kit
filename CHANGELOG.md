@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+### Breaking changes
+
+- The bundled mixed case messages no longer start with the attribute's name, so
+  `full_messages` names it once ("First name cannot be in all caps", not "First
+  name First name cannot be in all caps"), like Rails' own messages:
+  - `errors[:first_name]` is now `["cannot be in all caps"]`. Code that shows
+    `errors[attribute]` on its own should use `full_messages_for` instead.
+  - `attribute_name:` no longer changes the default message. `full_messages`
+    uses the attribute's translated name (`human_attribute_name`) instead; to
+    rename it, translate the attribute. `attribute_name:` still fills in
+    `%{item}` in custom messages and translations, which keep working.
+  - Apps that set `errors.format` to `"%{message}"` to hide the doubled name now
+    get messages with no name at all, and can drop that setting.
+
 ### Changed
 
 - US and Canadian phone numbers with extra digits right after the number and no
@@ -16,7 +30,6 @@
   becomes `(212) 555-1234 ext 5`. An extension written with non-ASCII digits
   (`x５`) is kept instead of being dropped. Other marked extensions (`x5`,
   `ext. 99`, `(x5)`, `#5`, …) are stored as before.
-
 ### Fixed
 
 - The phone validator's `area_key:` (and `format_as_phone`'s area key) now
