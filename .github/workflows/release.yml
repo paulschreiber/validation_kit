@@ -39,6 +39,18 @@ jobs:
       id-token: write # trusted publishing to RubyGems.org
 
     steps:
+      # Release exactly the commit this run is for: the one the tests above ran
+      # on and the approval was for. `rake release` pushes main at this
+      # commit, so if main has moved since (e.g. a merge during the approval
+      # wait), that push would be rejected after tagging locally. Stop first.
+      - name: Check main hasn't moved
+        run: |
+          remote_main=$(git ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" refs/heads/main | cut -f1)
+          if [ "$remote_main" != "$GITHUB_SHA" ]; then
+            echo "::error::main is at ${remote_main}, but this release run is for ${GITHUB_SHA}. Review the new commits, then start a new release from main."
+            exit 1
+          fi
+
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
