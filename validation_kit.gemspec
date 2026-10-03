@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.files         = `git ls-files -- lib README.md LICENSE CHANGELOG.md`.split("\n")
   s.require_paths = ["lib"]
-  s.required_ruby_version = ">= 3.4"
+  s.required_ruby_version = ">= 3.3"
 
   s.add_dependency "activemodel", ">= 7.2"
 

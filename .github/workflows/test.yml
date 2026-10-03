@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.4", "4.0"]
+        ruby: ["3.3", "3.4", "4.0"]
         # Gemfile tests the newest activemodel; the others test each older
         # minor series the gemspec allows (7.2 and 8.0), at its latest patch
         # release, not the .0 release.
