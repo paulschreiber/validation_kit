@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    validation_kit (2.0.1)
+    validation_kit (2.0.2)
       activemodel (>= 7.2)
 
 GEM
