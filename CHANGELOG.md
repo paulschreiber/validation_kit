@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Ruby 3.3 is supported again (the version Ubuntu ships), so the gem now
+  requires Ruby 3.3+ instead of 3.4+. CI tests it.
+
 ## 2.0.1 (2026-10-02)
 
 ### Breaking changes
